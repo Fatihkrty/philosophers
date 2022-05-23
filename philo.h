@@ -41,5 +41,7 @@ typedef struct s_rules
 
 int ft_atoi(const char *);
 int ft_isdigit(char c);
+int check_args(int ac, char **args);
+int init_app(t_rules *rules, char **args, int ac);
 
 #endif
