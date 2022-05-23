@@ -1,7 +1,7 @@
 #include "philo.h"
 
 
-void get_time(t_philo *philo){
+unsigned long get_time(t_philo *philo){
     struct timeval time;
     gettimeofday(&time, NULL);
     philo->sleep_time = time.tv_sec + time.tv_usec;
@@ -20,7 +20,7 @@ void *deneme(void *data)
     if (philo->id % 2 == 0)
         usleep(15000);
     printf("ID: %d\n", philo->id);
-    //printf("Time: %ld\n", get_time(philo));
+    printf("Time: %ld\n", get_time(philo));
 }
 
 void *create_thread(t_rules *rules)
