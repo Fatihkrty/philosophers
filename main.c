@@ -13,14 +13,16 @@ void *deneme(void *data)
 {
     t_philo *philo;
     t_rules *rules;
-
     philo = (t_philo *)data;
     rules = philo->rules;
 
     if (philo->id % 2 == 0)
-        usleep(15000);
+        usleep(1500);
+    pthread_mutex_lock(&(rules->lock));
     printf("ID: %d\n", philo->id);
     printf("Time: %ld\n", get_time(philo));
+    pthread_mutex_unlock(&(rules->lock));
+
 }
 
 void *create_thread(t_rules *rules)
@@ -33,6 +35,7 @@ void *create_thread(t_rules *rules)
     {
         rules->philosophers[i].id = i;
         rules->philosophers[i].rules = (t_rules *)rules;
+        //pthread_mutex_init(&(rules->philosophers[i].left_fork), NULL);
         pthread_create(&(rules->philosophers[i].th), NULL, deneme, &(rules->philosophers[i]));
         i++;
     }
@@ -40,6 +43,7 @@ void *create_thread(t_rules *rules)
     while (rules->nb_philo > i)
     {
         pthread_join(rules->philosophers[i].th, NULL);
+        //pthread_mutex_destroy(&(rules->philosophers[i].left_fork));
         i++;
     }
     printf("end process\n");
@@ -47,8 +51,8 @@ void *create_thread(t_rules *rules)
 
 int main(int ac, char **args)
 {
-
     t_rules rules;
+    pthread_mutex_init(&(rules.lock), NULL);
 
     args++;
     if (check_args(ac, args) != 0)
@@ -57,6 +61,7 @@ int main(int ac, char **args)
         return 1;
 
     create_thread(&rules);
+    pthread_mutex_destroy(&(rules.lock));
 
     return 0;
 }

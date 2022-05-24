@@ -14,6 +14,8 @@
 typedef struct s_philo
 {
     pthread_t th;
+    pthread_mutex_t left_fork;
+    pthread_mutex_t right_fork;
 
     int id;
     int sleep_time;
@@ -32,6 +34,7 @@ typedef struct s_rules
     int time_to_eat;
     int time_to_sleep;
     int must_eat;
+    pthread_mutex_t lock;
 
     t_philo philosophers[250];
 
