@@ -1,17 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   get_time.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/29 13:59:52 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/05/29 13:59:53 by fkaratay         ###   ########.fr       */
+/*   Created: 2022/05/29 15:54:31 by fkaratay          #+#    #+#             */
+/*   Updated: 2022/05/30 20:23:53 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int ft_isdigit(char c){
-    return (c >= '0' && c <= '9');
+unsigned long	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
