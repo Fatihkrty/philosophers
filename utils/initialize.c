@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:32 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/05/31 21:18:00 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/01 18:05:52 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void init_philos(t_rules *rules)
 			rules->philosophers[i].prev = &(rules->philosophers[rules->nb_philo - 1]);
 		else
 			rules->philosophers[i].prev = &(rules->philosophers[i - 1]);
-		if (rules->philosophers[i].id % 2 != 0)
-			rules->philosophers[i].fork_use = true;
 		pthread_mutex_init(&(rules->philosophers[i].lock_forks), NULL);
 		i++;
 	}

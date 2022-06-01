@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:38 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/05/31 20:40:44 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/01 20:36:37 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+// -----------DEFINES-----------//
+
+#define TAKEN " has taken a fork."
+#define EATING " is eating."
+#define SLEEPING " is sleeping."
+#define THINKING " is thinking."
+#define DIED " is died."
+
 
 // ------------STRUCTS----------//
 
@@ -55,6 +64,7 @@ typedef struct s_rules
 
     t_philo philosophers[250];
 	pthread_mutex_t print_lock;
+	pthread_mutex_t lock_philos;
 
 } t_rules;
 

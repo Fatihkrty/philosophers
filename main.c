@@ -6,18 +6,18 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/05/31 21:26:28 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/01 20:54:32 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void print_message(pthread_mutex_t *lock, unsigned long time, int id, char *msg)
-// {
-// 	pthread_mutex_lock(lock);
-// 	printf("%lu %d %s", time, id, msg);	
-// 	pthread_mutex_unlock(lock);
-// }
+void print_status(t_philo *philo, char *msg)
+{
+	pthread_mutex_lock(&(philo->rules->print_lock));
+	printf("%lu    %d %s\n", get_time(), philo->id, msg);
+	pthread_mutex_unlock(&(philo->rules->print_lock));
+}
 
 void sleeping_philo(t_philo *philo)
 {
@@ -42,29 +42,42 @@ void sleeping_philo(t_philo *philo)
 
 void eating_philo(t_philo *philo)
 {
-	if (philo->fork_use && !philo->prev->fork_use && !philo->is_eat)
+	pthread_mutex_lock(&(philo->lock_forks));
+	if (philo->fork_use && philo->prev->fork_use)
 	{
-		pthread_mutex_lock(&(philo->rules->print_lock));
-		printf("%lu %d is eating.\n", get_time() - philo->start_time,philo->id);
-		pthread_mutex_unlock(&(philo->rules->print_lock));
-
-		usleep(philo->rules->time_to_eat * 1000);
-
-		pthread_mutex_lock(&(philo->lock_forks));
-		philo->fork_use = false;
-		philo->prev->fork_use = true;
-		philo->is_eat = true;
-		philo->last_eat_time = get_time();
-		pthread_mutex_unlock(&(philo->lock_forks));
+		// philo->fork_use = false;
+		// philo->prev->fork_use = true;
+		// philo->is_eat = true;
+		print_status(philo, EATING);
 	}
+	//usleep(philo->rules->time_to_eat * 1000);
+	pthread_mutex_unlock(&(philo->lock_forks));
 }
+
+
 
 void taken_fork(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->rules->print_lock));
-	if (philo->fork_use && philo->prev->fork_use == false)
-		printf("%lu %d has taken a fork.\n", get_time() - philo->start_time, philo->id);
-	pthread_mutex_unlock(&(philo->rules->print_lock));
+	pthread_mutex_lock(&(philo->prev->lock_forks));
+	pthread_mutex_lock(&(philo->lock_forks));
+	
+	if (!philo->fork_use && !philo->prev->fork_use)
+	{
+		philo->fork_use = true;
+		philo->prev->fork_use = true;
+
+	}
+	else
+	{
+		philo->fork_use = false;
+		philo->prev->fork_use = false;
+	}
+	print_status(philo, TAKEN);
+
+	pthread_mutex_unlock(&(philo->prev->lock_forks));
+	pthread_mutex_unlock(&(philo->lock_forks));
+	eating_philo(philo);
+
 }
 
 void control_philo(t_philo *philo)
@@ -92,15 +105,8 @@ void *create_philos(void *data)
 		usleep(100);
 
 	taken_fork(philo);
-	eating_philo(philo);
-	sleeping_philo(philo);
-	//control_philo(philo);
-	
-	sleep(1);
 
-	taken_fork(philo);
-	eating_philo(philo);
-	sleeping_philo(philo);
+	// sleeping_philo(philo);
 
 	return NULL;
 }
@@ -113,8 +119,8 @@ void *create_thread(t_rules *rules)
 	while (rules->nb_philo > i)
 	{
 		pthread_create(&(rules->philosophers[i].th), NULL, create_philos, &(rules->philosophers[i]));
-		usleep(100);
 		i++;
+		//usleep(1000);
 	}
 
 	i = 0;
