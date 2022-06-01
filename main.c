@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/01 20:54:32 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/01 20:59:48 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void sleeping_philo(t_philo *philo)
 
 void eating_philo(t_philo *philo)
 {
+	pthread_mutex_lock(&(philo->prev->lock_forks));
 	pthread_mutex_lock(&(philo->lock_forks));
 	if (philo->fork_use && philo->prev->fork_use)
 	{
@@ -50,7 +51,8 @@ void eating_philo(t_philo *philo)
 		// philo->is_eat = true;
 		print_status(philo, EATING);
 	}
-	//usleep(philo->rules->time_to_eat * 1000);
+	usleep(philo->rules->time_to_eat * 10000);
+	pthread_mutex_unlock(&(philo->prev->lock_forks));
 	pthread_mutex_unlock(&(philo->lock_forks));
 }
 
@@ -72,10 +74,10 @@ void taken_fork(t_philo *philo)
 		philo->fork_use = false;
 		philo->prev->fork_use = false;
 	}
-	print_status(philo, TAKEN);
 
 	pthread_mutex_unlock(&(philo->prev->lock_forks));
 	pthread_mutex_unlock(&(philo->lock_forks));
+	print_status(philo, TAKEN);
 	eating_philo(philo);
 
 }
