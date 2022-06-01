@@ -6,12 +6,18 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/01 16:22:34 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/05/31 21:26:28 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+// void print_message(pthread_mutex_t *lock, unsigned long time, int id, char *msg)
+// {
+// 	pthread_mutex_lock(lock);
+// 	printf("%lu %d %s", time, id, msg);	
+// 	pthread_mutex_unlock(lock);
+// }
 
 void sleeping_philo(t_philo *philo)
 {
@@ -88,9 +94,13 @@ void *create_philos(void *data)
 	taken_fork(philo);
 	eating_philo(philo);
 	sleeping_philo(philo);
-	control_philo(philo);
+	//control_philo(philo);
 	
 	sleep(1);
+
+	taken_fork(philo);
+	eating_philo(philo);
+	sleeping_philo(philo);
 
 	return NULL;
 }
