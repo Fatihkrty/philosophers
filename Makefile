@@ -4,4 +4,4 @@ all:
 	gcc $(SRC) -lpthread
 
 run: all
-	./a.out 10 410 200 200
+	./a.out 10 4100 2000 2000

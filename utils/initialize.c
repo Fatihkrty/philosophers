@@ -23,6 +23,8 @@ void init_rules(t_rules *rules, char **args, int ac)
 		rules->must_eat = ft_atoi(args[4]);
 	else
 		rules->must_eat = -1;
+	pthread_mutex_init(&(rules->protect), NULL);
+
 }
 
 void init_philos(t_rules *rules)
@@ -35,10 +37,12 @@ void init_philos(t_rules *rules)
 		rules->philosophers[i].id = i + 1;
 		rules->philosophers[i].rules = rules;
 		if (i == 0)
-			rules->philosophers[i].prev = &(rules->philosophers[rules->nb_philo - 1]);
+			rules->philosophers[i].prev_forks = &(rules->philosophers[rules->nb_philo - 1].forks);
 		else
-			rules->philosophers[i].prev = &(rules->philosophers[i - 1]);
-		pthread_mutex_init(&(rules->philosophers[i].lock_forks), NULL);
+			rules->philosophers[i].prev_forks = &(rules->philosophers[i - 1].forks);
+		pthread_mutex_init(&(rules->philosophers[i].forks), NULL);
+		pthread_mutex_init(&(rules->philosophers[i].eat), NULL);
+		pthread_mutex_init((rules->philosophers[i].prev_forks), NULL);
 		i++;
 	}
 }

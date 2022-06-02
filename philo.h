@@ -38,17 +38,13 @@ typedef struct s_philo
     int id;
 
     pthread_t th;
-	pthread_mutex_t lock_forks;
-	pthread_mutex_t lock_sleep;
-
-	bool fork_use;
-	bool is_eat;
-	bool is_sleep;
+	pthread_mutex_t forks;
+    pthread_mutex_t *prev_forks;
+	pthread_mutex_t eat;
 
 	unsigned long start_time;
 	unsigned long last_eat_time;
 
-	struct s_philo *prev;
     struct s_rules *rules;
 
 } t_philo;
@@ -60,11 +56,13 @@ typedef struct s_rules
     int time_to_eat;
     int time_to_sleep;
     int must_eat;
-	bool is_dead;
 
     t_philo philosophers[250];
+
+	pthread_mutex_t protect;
 	pthread_mutex_t print_lock;
-	pthread_mutex_t lock_philos;
+
+
 
 } t_rules;
 
