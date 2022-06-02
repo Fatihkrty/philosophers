@@ -38,9 +38,9 @@ typedef struct s_philo
     int id;
 
     pthread_t th;
-	pthread_mutex_t forks;
-    pthread_mutex_t *prev_forks;
-	pthread_mutex_t eat;
+    pthread_t watch;
+	pthread_mutex_t fork;
+    pthread_mutex_t *prev_fork;
 
 	unsigned long start_time;
 	unsigned long last_eat_time;
@@ -57,11 +57,10 @@ typedef struct s_rules
     int time_to_sleep;
     int must_eat;
 
+    int is_died;
+
     t_philo philosophers[250];
-
-	pthread_mutex_t protect;
 	pthread_mutex_t print_lock;
-
 
 
 } t_rules;
@@ -72,6 +71,5 @@ int ft_atoi(const char *);
 int ft_isdigit(char c);
 int check_args(int ac, char **args);
 int init_app(t_rules *rules, char **args, int ac);
-void create_mutex(t_rules *rules);
 unsigned long get_time(void);
 #endif
