@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/01 20:59:48 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/03 14:51:54 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 void print_status(t_philo *philo, unsigned long time, char *msg)
 {
 	pthread_mutex_lock(&(philo->rules->print_lock));
-	printf("%lu    %d %s\n", get_time() - time, philo->id, msg);
+	if (philo->rules->is_died == -1)
+		printf("%lu    %d %s\n", get_time() - time, philo->id, msg);
 	pthread_mutex_unlock(&(philo->rules->print_lock));
 }
 
@@ -45,20 +46,20 @@ void *watch_philo_life(void *void_philo)
 	philo = (t_philo *)void_philo;
 	while(1)
 	{
-		if (philo->rules->is_died != -1 && get_time() - philo->last_eat_time >= philo->rules->time_to_die)
+		if (philo->last_eat_time && get_time() - philo->last_eat_time >= philo->rules->time_to_die)
 			break;
-		usleep(100);
+		usleep(10);
 	}
-	print_status(philo, 0, DIED);
-	exit(1);
+	philo->rules->is_died = philo->id;
+	printf("%lu    %d %s\n", get_time() - philo->start_time, philo->rules->is_died, DIED);
 }
 
 int eating_philo(t_philo *philo)
 {
-	if(philo->rules->is_died > -1)
-		return (1);
 	pthread_mutex_lock(philo->prev_fork);
 	pthread_mutex_lock(&(philo->fork));
+	if(philo->rules->is_died > -1)
+		return (1);
 	philo->last_eat_time = get_time();
 	print_status(philo, philo->start_time, EATING);
 	while(get_time() - philo->last_eat_time <= philo->rules->time_to_eat)
@@ -70,9 +71,10 @@ int eating_philo(t_philo *philo)
 
 int taken_fork(t_philo *philo)
 {
+
+	pthread_mutex_lock(philo->prev_fork);
 	if(philo->rules->is_died > -1)
 		return (1);
-	pthread_mutex_lock(philo->prev_fork);
 	print_status(philo, philo->start_time, TAKEN);
 	pthread_mutex_lock(&(philo->fork));
 	print_status(philo, philo->start_time, TAKEN);
