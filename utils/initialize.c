@@ -18,13 +18,16 @@ int init_rules(t_rules *rules, char **args, int ac)
 	rules->time_to_die = ft_atoi(args[1]);
 	rules->time_to_eat = ft_atoi(args[2]);
 	rules->time_to_sleep = ft_atoi(args[3]);
-	rules->is_died = -1;
+	rules->is_died = false;
+	rules->printable = true;
 
 	if (ac == 6)
 		rules->must_eat = ft_atoi(args[4]);
 	else
 		rules->must_eat = -1;
 	if(pthread_mutex_init(&(rules->print_lock), NULL))
+		return (1);
+	if(pthread_mutex_init(&(rules->protect), NULL))
 		return (1);
 	return (0);
 

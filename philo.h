@@ -57,7 +57,9 @@ typedef struct s_rules
     int time_to_sleep;
     int must_eat;
 
-    int is_died;
+    pthread_mutex_t protect;
+    bool is_died;
+    bool printable;
 
     t_philo philosophers[250];
 	pthread_mutex_t print_lock;
