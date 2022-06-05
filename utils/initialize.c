@@ -19,7 +19,6 @@ int init_rules(t_rules *rules, char **args, int ac)
 	rules->time_to_eat = ft_atoi(args[2]);
 	rules->time_to_sleep = ft_atoi(args[3]);
 	rules->is_died = false;
-	rules->printable = true;
 
 	if (ac == 6)
 		rules->must_eat = ft_atoi(args[4]);
@@ -27,7 +26,7 @@ int init_rules(t_rules *rules, char **args, int ac)
 		rules->must_eat = -1;
 	if(pthread_mutex_init(&(rules->print_lock), NULL))
 		return (1);
-	if(pthread_mutex_init(&(rules->protect), NULL))
+	if(pthread_mutex_init(&(rules->died_protect), NULL))
 		return (1);
 	return (0);
 
@@ -47,7 +46,14 @@ int init_philos(t_rules *rules)
 			rules->philosophers[i].prev_fork = &(rules->philosophers[rules->nb_philo - 1].fork);
 		else
 			rules->philosophers[i].prev_fork = &(rules->philosophers[i - 1].fork);
+		i++;
+	}
+	i = 0;
+	while (rules->nb_philo > i)
+	{
 		if(pthread_mutex_init(&(rules->philosophers[i].fork), NULL))
+			return(1);
+		if(pthread_mutex_init(&(rules->philosophers[i].eating), NULL))
 			return(1);
 		i++;
 	}

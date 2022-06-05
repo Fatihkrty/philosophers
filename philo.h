@@ -41,6 +41,7 @@ typedef struct s_philo
     pthread_t watch;
 	pthread_mutex_t fork;
     pthread_mutex_t *prev_fork;
+    pthread_mutex_t eating;
 
 	unsigned long start_time;
 	unsigned long last_eat_time;
@@ -52,14 +53,13 @@ typedef struct s_philo
 typedef struct s_rules
 {
     int nb_philo;
-    int time_to_die;
-    int time_to_eat;
-    int time_to_sleep;
+    unsigned long long time_to_die;
+    unsigned long long time_to_eat;
+    unsigned long long time_to_sleep;
     int must_eat;
-
-    pthread_mutex_t protect;
     bool is_died;
-    bool printable;
+
+    pthread_mutex_t died_protect;
 
     t_philo philosophers[250];
 	pthread_mutex_t print_lock;
