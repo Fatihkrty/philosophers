@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:38 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/01 20:36:37 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/06 18:00:50 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@ typedef struct s_philo
     int id;
 
     pthread_t th;
-    pthread_t watch;
+
 	pthread_mutex_t fork;
     pthread_mutex_t *prev_fork;
     pthread_mutex_t eating;
 
 	unsigned long start_time;
 	unsigned long last_eat_time;
+	int all_ate;
 
     struct s_rules *rules;
-
 } t_philo;
 
 typedef struct s_rules
@@ -57,6 +57,7 @@ typedef struct s_rules
     unsigned long long time_to_eat;
     unsigned long long time_to_sleep;
     int must_eat;
+
     bool is_died;
 
     pthread_mutex_t died_protect;

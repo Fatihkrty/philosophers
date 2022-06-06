@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:32 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/01 18:05:52 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/06 18:00:23 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int init_philos(t_rules *rules)
 		rules->philosophers[i].id = i + 1;
 		rules->philosophers[i].rules = rules;
 		rules->philosophers[i].last_eat_time = 0;
+		rules->philosophers[i].all_ate = 0;
 		if (i == 0)
 			rules->philosophers[i].prev_fork = &(rules->philosophers[rules->nb_philo - 1].fork);
 		else
