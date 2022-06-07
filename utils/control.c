@@ -12,6 +12,11 @@
 
 #include "../philo.h"
 
+
+int is_valid_char(char c){
+    return ((c >= '0' && c <= '9') || c == '+');
+}
+
 int check_args(int ac, char **args)
 {
     int i;
@@ -25,8 +30,8 @@ int check_args(int ac, char **args)
         j = 0;
         while (args[i][j])
         {
-            if (!ft_isdigit(args[i][j]))
-                return 1;
+            if (!is_valid_char(args[i][j]))
+                return (1);
             j++;
         }
         i++;

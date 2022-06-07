@@ -71,7 +71,6 @@ typedef struct s_rules
 // ----------UTILS----------------//
 
 int ft_atoi(const char *);
-int ft_isdigit(char c);
 int check_args(int ac, char **args);
 int init_app(t_rules *rules, char **args, int ac);
 unsigned long get_time(void);

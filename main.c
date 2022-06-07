@@ -54,6 +54,8 @@ void eating_philo(t_philo *philo)
 	pthread_mutex_lock(&(philo->eating));
 	print_status(philo, philo->start_time, EATING);
 	philo->last_eat_time = get_time();
+	if (philo->rules->must_eat != -1)
+		philo->all_ate++;
 	pthread_mutex_unlock(&(philo->eating));
 	wait_time(philo->last_eat_time, philo->rules->time_to_eat);
 	pthread_mutex_unlock(&(philo->fork));
@@ -76,7 +78,7 @@ void *create_philos(void *void_philo)
 		print_status(philo, philo->start_time, THINKING);
 		control_philo_life(philo);
 		pthread_mutex_lock(&(philo->rules->died_protect));
-		if(philo->rules->is_died)
+		if(philo->rules->is_died || (philo->rules->must_eat != -1 && philo->all_ate >= philo->rules->must_eat))
 		{
 			pthread_mutex_unlock(&(philo->rules->died_protect));
 			break;

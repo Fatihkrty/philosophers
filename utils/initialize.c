@@ -12,6 +12,22 @@
 
 #include "../philo.h"
 
+int control_value(t_rules *rules)
+{
+	if (rules->nb_philo < 2 || rules->nb_philo > 250)
+		return (1);
+	if (rules->time_to_die <= 0)
+		return (1);
+	if (rules->time_to_eat <= 0)
+		return (1);
+	if (rules->time_to_sleep <= 0)
+		return (1);
+	if (rules->must_eat == 0 || rules->must_eat <= -2)
+		return (1);
+	return (0);
+	
+}
+
 int init_rules(t_rules *rules, char **args, int ac)
 {
 	rules->nb_philo = ft_atoi(args[0]);
@@ -27,6 +43,8 @@ int init_rules(t_rules *rules, char **args, int ac)
 	if(pthread_mutex_init(&(rules->print_lock), NULL))
 		return (1);
 	if(pthread_mutex_init(&(rules->died_protect), NULL))
+		return (1);
+	if (control_value(rules))
 		return (1);
 	return (0);
 
@@ -47,11 +65,6 @@ int init_philos(t_rules *rules)
 			rules->philosophers[i].prev_fork = &(rules->philosophers[rules->nb_philo - 1].fork);
 		else
 			rules->philosophers[i].prev_fork = &(rules->philosophers[i - 1].fork);
-		i++;
-	}
-	i = 0;
-	while (rules->nb_philo > i)
-	{
 		if(pthread_mutex_init(&(rules->philosophers[i].fork), NULL))
 			return(1);
 		if(pthread_mutex_init(&(rules->philosophers[i].eating), NULL))
