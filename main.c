@@ -120,5 +120,6 @@ int main(int ac, char **args)
 		return (1);
 	if(create_thread(&rules))
 		return (1);
+	destroy_mutex(&rules);
 	return (0);
 }

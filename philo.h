@@ -73,5 +73,6 @@ typedef struct s_rules
 int ft_atoi(const char *);
 int check_args(int ac, char **args);
 int init_app(t_rules *rules, char **args, int ac);
+void destroy_mutex(t_rules *rules);
 unsigned long get_time(void);
 #endif

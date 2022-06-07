@@ -18,10 +18,10 @@ int control_value(t_rules *rules)
 		return (1);
 	if (rules->time_to_die <= 0)
 		return (1);
-	if (rules->time_to_eat <= 0)
-		return (1);
-	if (rules->time_to_sleep <= 0)
-		return (1);
+	// if (rules->time_to_eat <= 0)
+	// 	return (1);
+	// if (rules->time_to_sleep <= 0)
+		// return (1);
 	if (rules->must_eat == 0 || rules->must_eat <= -2)
 		return (1);
 	return (0);
