@@ -1,40 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   control.c                                          :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/29 13:59:46 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/05/29 13:59:47 by fkaratay         ###   ########.fr       */
+/*   Created: 2022/05/29 13:59:49 by fkaratay          #+#    #+#             */
+/*   Updated: 2022/06/08 16:24:40 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-
-int is_valid_char(char c){
-    return ((c >= '0' && c <= '9') || c == '+');
-}
-
-int check_args(int ac, char **args)
+int	ft_atoi(const char *str)
 {
-    int i;
-    int j;
+	int	res;
 
-    if (ac != 5 && ac != 6)
-        return 1;
-    i = 0;
-    while (args[i])
-    {
-        j = 0;
-        while (args[i][j])
-        {
-            if (!is_valid_char(args[i][j]))
-                return (1);
-            j++;
-        }
-        i++;
-    }
-    return 0;
+	res = 0;
+	while (*str >= 48 && *str <= 57)
+	{
+		res = (res * 10) + (*str - 48);
+		str++;
+	}
+	return (res);
 }

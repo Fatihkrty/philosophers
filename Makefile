@@ -1,37 +1,36 @@
-NAME = philosophers
-SRC = main.c ./utils/*.c
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/06/08 16:20:10 by fkaratay          #+#    #+#              #
+#    Updated: 2022/06/08 16:20:11 by fkaratay         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-#-fsanitize=thread
+NAME = philo
 
-all:
-	gcc $(SRC) -lpthread -Wall -Werror -Wextra
+SRC = $(wildcard ./utils/*.c) main.c
 
+CC = gcc
 
+CFLAGS = -Wall -Wextra -Werror -lpthread
 
-run: all
-	./a.out 11 610 200 200
+OBJ = $(SRC:.c=.o)
 
-# NAME = philo
+$(NAME): $(OBJ)
+		$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-# SRC = $(wildcard ./utils/*.c) main.c
+all: $(NAME)
 
-# CC = gcc
+clean:
+		rm -rf $(OBJ)
 
-# CFLAGS = -Wall -Wextra -Werror -lpthread
+fclean:
+		rm -rf $(OBJ) $(NAME)
 
-# OBJ = $(SRC:.c=.o)
+re: fclean all
 
-# $(NAME): $(OBJ)
-# 		$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-
-# all: $(NAME)
-
-# clean:
-# 		rm -rf $(OBJ)
-
-# fclean:
-# 		rm -rf $(OBJ) $(NAME)
-
-# re: fclean all
-
-# .PHONY: all re clean fclean
+.PHONY: all re clean fclean

@@ -6,30 +6,13 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/06 17:55:02 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/08 16:40:28 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-void control_philo_life(t_philo *philo)
-{
-	static bool printable = true;
-	if (philo->last_eat_time && get_time() - philo->last_eat_time >= philo->rules->time_to_die)
-	{
-		pthread_mutex_lock(&(philo->rules->died_protect));
-		philo->rules->is_died = true;
-		pthread_mutex_unlock(&(philo->rules->died_protect));
-		if(printable)
-		{
-			printf("%lu    %d %s\n", get_time() - philo->start_time, philo->id, DIED);
-			printable = false;
-		}
-	}
-}
-
-void print_status(t_philo *philo, unsigned long time, char *msg)
+void	print_status(t_philo *philo, unsigned long time, char *msg)
 {
 	pthread_mutex_lock(&(philo->rules->print_lock));
 	pthread_mutex_lock(&(philo->rules->died_protect));
@@ -39,13 +22,7 @@ void print_status(t_philo *philo, unsigned long time, char *msg)
 	pthread_mutex_unlock(&(philo->rules->print_lock));
 }
 
-void wait_time(unsigned long long timestamp, unsigned long long endstamp)
-{
-	while(get_time() - timestamp <= endstamp)
-		usleep(100);
-}
-
-void eating_philo(t_philo *philo)
+void	eating_philo(t_philo *philo)
 {
 	pthread_mutex_lock(philo->prev_fork);
 	print_status(philo, philo->start_time, TAKEN);
@@ -62,9 +39,9 @@ void eating_philo(t_philo *philo)
 	pthread_mutex_unlock(philo->prev_fork);
 }
 
-void *create_philos(void *void_philo)
+void	*create_philos(void *void_philo)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)void_philo;
 	if (!(philo->id % 2))
@@ -78,47 +55,48 @@ void *create_philos(void *void_philo)
 		print_status(philo, philo->start_time, THINKING);
 		control_philo_life(philo);
 		pthread_mutex_lock(&(philo->rules->died_protect));
-		if(philo->rules->is_died || (philo->rules->must_eat != -1 && philo->all_ate >= philo->rules->must_eat))
+		if (philo->rules->is_died || (philo->rules->must_eat != -1 \
+			&& philo->all_ate >= philo->rules->must_eat))
 		{
 			pthread_mutex_unlock(&(philo->rules->died_protect));
-			break;
+			break ;
 		}
 		pthread_mutex_unlock(&(philo->rules->died_protect));
 	}
-	return NULL;
+	return (NULL);
 }
 
-int create_thread(t_rules *rules)
+int	create_thread(t_rules *rules)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (rules->nb_philo > i)
 	{
-		if(pthread_create(&(rules->philosophers[i].th), NULL, create_philos, &(rules->philosophers[i])))
+		if (pthread_create(&(rules->philosophers[i].th), NULL, \
+			create_philos, &(rules->philosophers[i])))
 			return (1);
 		i++;
 	}
-
 	i = 0;
 	while (rules->nb_philo > i)
 	{
-		if(pthread_join(rules->philosophers[i].th, NULL))
+		if (pthread_join(rules->philosophers[i].th, NULL))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-int main(int ac, char **args)
+int	main(int ac, char **args)
 {
-	t_rules rules;
+	t_rules	rules;
 
 	if (ac > 1)
 		args++;
 	if (check_args(ac, args) || init_app(&rules, args, ac))
 		return (1);
-	if(create_thread(&rules))
+	if (create_thread(&rules))
 		return (1);
 	destroy_mutex(&rules);
 	return (0);
