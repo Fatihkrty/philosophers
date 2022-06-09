@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:39:42 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/08 16:40:32 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/09 13:32:16 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,33 @@ void	wait_time(unsigned long long timestamp, unsigned long long endstamp)
 		usleep(100);
 }
 
-void	control_philo_life(t_philo *philo)
+void	*control_philo_life(void *vrules)
 {
+	printf("geldi\n");
+	int	i;
 	static bool	printable = true;
-
-	if (philo->last_eat_time && get_time() - \
-		philo->last_eat_time >= philo->rules->time_to_die)
+	t_rules *rules;
+	rules = (t_rules *)vrules;
+	i = 0;
+	while (!(rules->is_died))
 	{
-		pthread_mutex_lock(&(philo->rules->died_protect));
-		philo->rules->is_died = true;
-		pthread_mutex_unlock(&(philo->rules->died_protect));
-		if (printable)
+		//printf("last: %d\n", get_time() - rules->philosophers[i].last_eat_time >= rules->time_to_die);
+		if (get_time() - rules->philosophers[i].last_eat_time >= rules->time_to_die)
 		{
-			printf("%lu    %d %s\n", get_time() - \
-					philo->start_time, philo->id, DIED);
-			printable = false;
+			pthread_mutex_lock(&(rules->died_protect));
+			rules->is_died = true;
+			pthread_mutex_unlock(&(rules->died_protect));
+			if (printable)
+			{
+				printf("%lu    %d %s\n", get_time() - \
+						rules->philosophers[i].start_time, rules->philosophers[i].id, DIED);
+				printable = false;
+			}
 		}
+		if (i == rules->nb_philo - 1)
+			i = -1;
+		i++;
+		usleep(100);
 	}
+	
 }

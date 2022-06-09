@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:38 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/08 17:01:06 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/09 13:24:20 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-# define TAKEN " has taken a fork."
+# define TAKENL " has taken a left fork."
+# define TAKENR " has taken a right fork."
 # define EATING " is eating."
 # define SLEEPING " is sleeping."
 # define THINKING " is thinking."
@@ -32,7 +33,6 @@ typedef struct s_philo
 	pthread_t		th;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*prev_fork;
-	pthread_mutex_t	eating;
 	unsigned long	start_time;
 	unsigned long	last_eat_time;
 	struct s_rules	*rules;
@@ -47,6 +47,7 @@ typedef struct s_rules
 	unsigned long long	time_to_eat;
 	unsigned long long	time_to_sleep;
 	pthread_mutex_t		died_protect;
+	pthread_mutex_t		eating;
 	t_philo				philosophers[250];
 	pthread_mutex_t		print_lock;
 }				t_rules;
@@ -56,4 +57,7 @@ int				ft_atoi(const char *str);
 int				check_args(int ac, char **args);
 int				init_app(t_rules *rules, char **args, int ac);
 void			destroy_mutex(t_rules *rules);
+void			*control_philo_life(void *vrules);
+void			wait_time(unsigned long long timestamp, unsigned long long endstamp);
+
 #endif

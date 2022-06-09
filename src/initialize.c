@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:32 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/08 16:30:46 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/09 13:29:03 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,13 @@ int	init_rules(t_rules *rules, char **args, int ac)
 		rules->must_eat = ft_atoi(args[4]);
 	else
 		rules->must_eat = -1;
+	if (control_value(rules))
+		return (1);
 	if (pthread_mutex_init(&(rules->print_lock), NULL))
 		return (1);
 	if (pthread_mutex_init(&(rules->died_protect), NULL))
 		return (1);
-	if (control_value(rules))
+	if (pthread_mutex_init(&(rules->eating), NULL))
 		return (1);
 	return (0);
 }
@@ -52,7 +54,7 @@ int	init_philos(t_rules *rules)
 	{
 		rules->philosophers[i].id = i + 1;
 		rules->philosophers[i].rules = rules;
-		rules->philosophers[i].last_eat_time = 0;
+		rules->philosophers[i].last_eat_time = get_time();
 		rules->philosophers[i].all_ate = 0;
 		if (i == 0)
 			rules->philosophers[i].prev_fork = \
@@ -60,9 +62,8 @@ int	init_philos(t_rules *rules)
 		else
 			rules->philosophers[i].prev_fork = \
 			&(rules->philosophers[i - 1].fork);
+		//rules->philosophers[i].prev_fork = &(rules->philosophers[(i + 1) % rules->nb_philo].fork);
 		if (pthread_mutex_init(&(rules->philosophers[i].fork), NULL))
-			return (1);
-		if (pthread_mutex_init(&(rules->philosophers[i].eating), NULL))
 			return (1);
 		i++;
 	}
