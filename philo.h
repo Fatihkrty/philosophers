@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:38 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/09 13:24:20 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/09 14:52:36 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-# define TAKENL " has taken a left fork."
-# define TAKENR " has taken a right fork."
+# define TAKEN " has taken a left fork."
 # define EATING " is eating."
 # define SLEEPING " is sleeping."
 # define THINKING " is thinking."
@@ -41,20 +40,24 @@ typedef struct s_philo
 typedef struct s_rules
 {
 	int					nb_philo;
-	bool				is_died;
 	int					must_eat;
+	bool				is_died;
 	unsigned long long	time_to_die;
 	unsigned long long	time_to_eat;
 	unsigned long long	time_to_sleep;
 	pthread_mutex_t		died_protect;
 	pthread_mutex_t		eating;
-	t_philo				philosophers[250];
 	pthread_mutex_t		print_lock;
+	t_philo				philosophers[200];
 }				t_rules;
 
 unsigned long	get_time(void);
 int				ft_atoi(const char *str);
 int				check_args(int ac, char **args);
+int				control_value(t_rules *rules);
+void			print_status(t_philo *philo, unsigned long time, char *msg);
+void			eating_philo(t_philo *philo);
+void			*create_philos(void *void_philo);
 int				init_app(t_rules *rules, char **args, int ac);
 void			destroy_mutex(t_rules *rules);
 void			*control_philo_life(void *vrules);
