@@ -19,7 +19,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-# define TAKEN " has taken a left fork."
+# define TAKEN " has taken a fork."
 # define EATING " is eating."
 # define SLEEPING " is sleeping."
 # define THINKING " is thinking."
@@ -28,12 +28,13 @@
 typedef struct s_philo
 {
 	int				id;
-	int				all_ate;
+	int				ate_count;
 	pthread_t		th;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*prev_fork;
-	unsigned long	start_time;
-	unsigned long	last_eat_time;
+	pthread_mutex_t last_time_mutex;
+	unsigned long long	start_time;
+	unsigned long long	last_eat_time;
 	struct s_rules	*rules;
 }				t_philo;
 
@@ -51,7 +52,7 @@ typedef struct s_rules
 	t_philo				philosophers[200];
 }				t_rules;
 
-unsigned long	get_time(void);
+unsigned long long	get_time(void);
 int				ft_atoi(const char *str);
 int				check_args(int ac, char **args);
 int				control_value(t_rules *rules);
@@ -61,6 +62,6 @@ void			*create_philos(void *void_philo);
 int				init_app(t_rules *rules, char **args, int ac);
 void			destroy_mutex(t_rules *rules);
 void			*control_philo_life(void *vrules);
-void			wait_time(unsigned long long timestamp, unsigned long long endstamp);
+void			smart_sleep(t_philo *philo, bool eating);
 
 #endif

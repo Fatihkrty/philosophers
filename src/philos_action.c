@@ -17,7 +17,7 @@ void	print_status(t_philo *philo, unsigned long time, char *msg)
 	pthread_mutex_lock(&(philo->rules->print_lock));
 	pthread_mutex_lock(&(philo->rules->died_protect));
 	if (!philo->rules->is_died)
-		printf("%lu    %d %s\n", get_time() - time, philo->id, msg);
+		printf("%llu    %d %s\n", get_time() - time, philo->id, msg);
 	pthread_mutex_unlock(&(philo->rules->died_protect));
 	pthread_mutex_unlock(&(philo->rules->print_lock));
 }
@@ -28,13 +28,10 @@ void	eating_philo(t_philo *philo)
 	print_status(philo, philo->start_time, TAKEN);
 	pthread_mutex_lock(&(philo->fork));
 	print_status(philo, philo->start_time, TAKEN);
-	pthread_mutex_lock(&(philo->rules->eating));
-	philo->last_eat_time = get_time();
 	print_status(philo, philo->start_time, EATING);
-	if (philo->rules->must_eat != -1)
-		(philo->all_ate)++;
-	pthread_mutex_unlock(&(philo->rules->eating));
-	wait_time(philo->last_eat_time, philo->rules->time_to_eat);
+	philo->last_eat_time = get_time();
+	smart_sleep(philo, true);
+	(philo->ate_count)++;
 	pthread_mutex_unlock(philo->prev_fork);
 	pthread_mutex_unlock(&(philo->fork));
 }
@@ -51,16 +48,12 @@ void	*create_philos(void *void_philo)
 	{
 		eating_philo(philo);
 		print_status(philo, philo->start_time, SLEEPING);
-		wait_time(get_time(), philo->rules->time_to_sleep);
+		smart_sleep(philo, false);
 		print_status(philo, philo->start_time, THINKING);
-		pthread_mutex_lock(&(philo->rules->died_protect));
-		if (philo->rules->is_died || (philo->rules->must_eat != -1 \
-			&& philo->all_ate >= philo->rules->must_eat))
-		{
-			pthread_mutex_unlock(&(philo->rules->died_protect));
+		if (philo->rules->is_died)
 			break ;
-		}
-		pthread_mutex_unlock(&(philo->rules->died_protect));
+		if (philo->rules->must_eat != -1 && philo->ate_count >= philo->rules->must_eat)
+			break;
 	}
 	return (NULL);
 }

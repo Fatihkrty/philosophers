@@ -12,36 +12,53 @@
 
 #include "../philo.h"
 
-void	wait_time(unsigned long long timestamp, unsigned long long endstamp)
+void	smart_sleep(t_philo *philo, bool eating)
 {
-	while (get_time() - timestamp <= endstamp)
-		usleep(100);
+	unsigned long long start_time;
+	if (eating)
+	{
+		while (get_time() - philo->last_eat_time <= philo->rules->time_to_eat)
+			usleep(100);
+	}
+	else
+	{
+		start_time = get_time();
+		while (get_time() - start_time <= philo->rules->time_to_sleep)
+			usleep(100);
+	}
 }
 
 void	*control_philo_life(void *void_rules)
 {
 	int	i;
 	t_rules *rules;
+	// t_philo *philo;
+
+	// philo = (rules->philosophers);
 	static bool	printable = true;
 	
 	rules = (t_rules *)void_rules;
 	i = 0;
 	while (!(rules->is_died))
 	{
+		if (i == rules->nb_philo)
+			i = 0;
+		pthread_mutex_lock(&(rules->philosophers[i].last_time_mutex));
 		if (get_time() - rules->philosophers[i].last_eat_time >= rules->time_to_die)
 		{
+			pthread_mutex_unlock(&(rules->philosophers[i].last_time_mutex));
 			pthread_mutex_lock(&(rules->died_protect));
 			rules->is_died = true;
 			pthread_mutex_unlock(&(rules->died_protect));
 			if (printable)
 			{
-				printf("%lu    %d %s\n", get_time() - \
-						rules->philosophers[i].start_time, rules->philosophers[i].id, DIED);
+				printf("%llu    %d %s\n", get_time() - rules->philosophers[i].start_time, rules->philosophers[i].id, DIED);
 				printable = false;
 			}
 		}
-		if (i == rules->nb_philo - 1)
-			i = -1;
+		else
+			pthread_mutex_unlock(&(rules->philosophers[i].last_time_mutex));
+
 		i++;
 		usleep(100);
 	}

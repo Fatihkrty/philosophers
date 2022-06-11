@@ -43,7 +43,7 @@ int	init_philos(t_rules *rules)
 	{
 		rules->philosophers[i].id = i + 1;
 		rules->philosophers[i].rules = rules;
-		rules->philosophers[i].all_ate = 0;
+		rules->philosophers[i].ate_count = 0;
 		if (i == 0)
 			rules->philosophers[i].prev_fork = \
 			&(rules->philosophers[rules->nb_philo - 1].fork);
@@ -51,6 +51,8 @@ int	init_philos(t_rules *rules)
 			rules->philosophers[i].prev_fork = \
 			&(rules->philosophers[i - 1].fork);
 		if (pthread_mutex_init(&(rules->philosophers[i].fork), NULL))
+			return (1);
+		if (pthread_mutex_init(&(rules->philosophers[i].last_time_mutex), NULL))
 			return (1);
 		i++;
 	}

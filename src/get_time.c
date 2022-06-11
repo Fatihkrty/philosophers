@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "../philo.h"
+#include <limits.h>
 
-unsigned long	get_time(void)
+unsigned long long	get_time(void)
 {
 	struct timeval	tv;
 

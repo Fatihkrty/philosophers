@@ -19,10 +19,10 @@ int	create_thread(t_rules *rules, pthread_t *watch)
 	i = 0;
 	while (rules->nb_philo > i)
 	{
+		rules->philosophers[i].last_eat_time = get_time();
 		if (pthread_create(&(rules->philosophers[i].th), NULL, \
 			create_philos, &(rules->philosophers[i])))
 			return (1);
-		rules->philosophers[i].last_eat_time = get_time();
 		i++;
 	}
 	if (pthread_create(watch, NULL, control_philo_life, rules))
