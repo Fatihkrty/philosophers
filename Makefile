@@ -6,7 +6,7 @@
 #    By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/08 16:20:10 by fkaratay          #+#    #+#              #
-#    Updated: 2022/06/08 17:46:51 by fkaratay         ###   ########.fr        #
+#    Updated: 2022/06/13 01:45:56 by fkaratay         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ SRC = $(wildcard ./src/*.c) main.c
 
 CC = gcc
 
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 OBJ = $(SRC:.c=.o)
 
