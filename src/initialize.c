@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:32 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/09 14:37:03 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/12 14:08:46 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int	init_rules(t_rules *rules, char **args, int ac)
 	if (pthread_mutex_init(&(rules->print_lock), NULL))
 		return (1);
 	if (pthread_mutex_init(&(rules->died_protect), NULL))
-		return (1);
-	if (pthread_mutex_init(&(rules->eating), NULL))
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:39:42 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/09 15:00:24 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/12 14:15:03 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ void	eating_philo(t_philo *philo)
 	pthread_mutex_lock(&(philo->fork));
 	print_status(philo, philo->start_time, TAKEN);
 	print_status(philo, philo->start_time, EATING);
+	pthread_mutex_lock(&(philo->last_time_mutex));
 	philo->last_eat_time = get_time();
+	pthread_mutex_unlock(&(philo->last_time_mutex));
 	smart_sleep(philo, true);
 	(philo->ate_count)++;
 	pthread_mutex_unlock(philo->prev_fork);
@@ -50,8 +52,13 @@ void	*create_philos(void *void_philo)
 		print_status(philo, philo->start_time, SLEEPING);
 		smart_sleep(philo, false);
 		print_status(philo, philo->start_time, THINKING);
+		pthread_mutex_lock(&(philo->rules->died_protect));
 		if (philo->rules->is_died)
+		{
+			pthread_mutex_unlock(&(philo->rules->died_protect));
 			break ;
+		}
+		pthread_mutex_unlock(&(philo->rules->died_protect));
 		if (philo->rules->must_eat != -1 && philo->ate_count >= philo->rules->must_eat)
 			break;
 	}

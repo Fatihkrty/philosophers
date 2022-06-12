@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:38 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/09 14:52:36 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/12 14:08:24 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct s_rules
 	unsigned long long	time_to_eat;
 	unsigned long long	time_to_sleep;
 	pthread_mutex_t		died_protect;
-	pthread_mutex_t		eating;
 	pthread_mutex_t		print_lock;
 	t_philo				philosophers[200];
 }				t_rules;
