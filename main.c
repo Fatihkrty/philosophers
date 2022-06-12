@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/09 15:05:05 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:45:03 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	join_thread(t_rules *rules, pthread_t *watch)
 
 int	main(int ac, char **args)
 {
-	t_rules	rules;
+	t_rules		rules;
 	pthread_t	watch;
 
 	if (ac > 1)

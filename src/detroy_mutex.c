@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:23:33 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/12 14:08:28 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/12 21:41:26 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	destroy_mutex(t_rules *rules)
 	pthread_mutex_destroy(&(rules->print_lock));
 	while (rules->nb_philo > i)
 	{
-		pthread_mutex_destroy(&(rules->philosophers[i].fork));
+		if (pthread_mutex_destroy(&(rules->philosophers[i].fork)))
+			return ;
+		if (pthread_mutex_destroy(&(rules->philosophers[i].last_time_mutex)))
+			return ;
 		i++;
 	}
 }

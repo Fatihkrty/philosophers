@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 14:34:52 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/12 14:12:34 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/13 01:44:02 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,15 @@ void	*control_philo_life(void *void_rules)
 	{
 		if (i == rules->nb_philo)
 			i = 0;
+		pthread_mutex_lock(&(rules->died_protect));
+		if (rules->must_eat != -1 && \
+			(rules->philosophers[i].ate_count >= rules->must_eat))
+		{
+			rules->all_ate = true;
+			pthread_mutex_unlock(&(rules->died_protect));
+			break ;
+		}
+		pthread_mutex_unlock(&(rules->died_protect));
 		control_philo_life_tools(&(rules->philosophers[i]), rules);
 		i++;
 		usleep(100);

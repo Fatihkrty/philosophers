@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:32 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/12 14:08:46 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/12 21:55:08 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	init_rules(t_rules *rules, char **args, int ac)
 	rules->time_to_eat = ft_atoi(args[2]);
 	rules->time_to_sleep = ft_atoi(args[3]);
 	rules->is_died = false;
+	rules->all_ate = false;
 	if (ac == 6)
 		rules->must_eat = ft_atoi(args[4]);
 	else
