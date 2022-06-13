@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:35 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/13 01:45:03 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/13 10:23:52 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,16 @@ int	main(int ac, char **args)
 
 	if (ac > 1)
 		args++;
-	if (check_args(ac, args) || init_app(&rules, args, ac))
+	if (check_args(ac, args))
 		return (1);
+	if (init_app(&rules, args, ac) == 1)
+		return (1);
+	if (init_app(&rules, args, ac) == 2)
+	{
+		printf("0     1 has taken a fork.\n");
+		printf("0     1 is died\n");
+		return (1);
+	}
 	if (create_thread(&rules, &watch))
 		return (1);
 	if (join_thread(&rules, &watch))

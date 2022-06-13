@@ -6,7 +6,7 @@
 /*   By: fkaratay <fkaratay@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 13:59:32 by fkaratay          #+#    #+#             */
-/*   Updated: 2022/06/12 21:55:08 by fkaratay         ###   ########.fr       */
+/*   Updated: 2022/06/13 10:16:54 by fkaratay         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ int	init_rules(t_rules *rules, char **args, int ac)
 		rules->must_eat = ft_atoi(args[4]);
 	else
 		rules->must_eat = -1;
-	if (control_value(rules))
+	if (control_value(rules) == 1)
 		return (1);
+	if (control_value(rules) == 2)
+		return (2);
 	if (pthread_mutex_init(&(rules->print_lock), NULL))
 		return (1);
 	if (pthread_mutex_init(&(rules->died_protect), NULL))
@@ -60,8 +62,10 @@ int	init_philos(t_rules *rules)
 
 int	init_app(t_rules *rules, char **args, int ac)
 {
-	if (init_rules(rules, args, ac))
+	if (init_rules(rules, args, ac) == 1)
 		return (1);
+	if (init_rules(rules, args, ac) == 2)
+		return (2);
 	if (init_philos(rules))
 		return (1);
 	return (0);
